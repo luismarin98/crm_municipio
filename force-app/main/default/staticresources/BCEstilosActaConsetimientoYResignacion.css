@@ -40,9 +40,25 @@ h1.formulario-titulo {
   line-height: 1.4;
 }
 
+/* Modificar los estilos de los formularios */
 .formulario-juridica,
 .formulario-natural {
-  display: none;
+    display: none; /* Oculto por defecto */
+    opacity: 0;
+    height: 0; /* Añadir altura 0 cuando está oculto */
+    overflow: hidden; /* Ocultar el contenido */
+    margin: 0; /* Eliminar márgenes cuando está oculto */
+    padding: 0; /* Eliminar padding cuando está oculto */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.formulario-juridica.visible,
+.formulario-natural.visible {
+    display: block;
+    opacity: 1;
+    height: auto; /* Restaurar altura automática */
+    margin-bottom: 20px; /* Restaurar margen cuando es visible */
+    padding: 20px; /* Restaurar padding cuando es visible */
 }
 
 /* Estilos para el contenedor del formulario */
@@ -54,6 +70,7 @@ h1.formulario-titulo {
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  margin-bottom: 20px;
 }
 
 /* Estilos para la fecha */
@@ -100,16 +117,12 @@ h1.formulario-titulo {
   border-radius: 8px;
 }
 
-.solicitante-titulo {
-  color: #000080;
-  font-size: 1rem;
-  text-transform: uppercase;
-}
-
+.solicitante-titulo,
 .tipoFormulario {
   color: #000080;
   font-size: 1rem;
   text-transform: uppercase;
+  margin-bottom: 15px;
 }
 
 .selector-tipo {
@@ -118,6 +131,7 @@ h1.formulario-titulo {
   justify-content: space-between;
   gap: 20px;
   align-items: center;
+  margin-bottom: 0; /* Eliminar margen inferior */
 }
 
 .selector-tipo select {
@@ -132,6 +146,9 @@ h1.formulario-titulo {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
 }
 
 .solicitante-campo {
@@ -179,6 +196,7 @@ h1.formulario-titulo {
   text-align: center;
   border-radius: 8px;
   padding: 15px;
+  margin: 10px 0;
 }
 
 .nota-informativa p {
@@ -202,6 +220,7 @@ h1.formulario-titulo {
   color: white;
   padding: 15px;
   border-radius: 8px;
+  margin-bottom: 20px;
 }
 
 .requisitos-titulo h2 {
@@ -265,102 +284,99 @@ h1.formulario-titulo {
   text-align: center;
 }
 
-/* Estilos para el registro de direcciones */
-.registro-direcciones-container {
+/* Estilos para el registro de elementos */
+.registro-elementos-container {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
 }
 
-/* Estilos para la tabla de registro */
-.tabla-registro {
+.elementos-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+  gap: 20px;
+}
+
+.elemento-campo {
+  /* No need for flex here, grid handles it */
+  /* min-width: 200px;  Removed min-width, let grid and content determine width */
+}
+
+.elemento-accion {
   display: flex;
-  flex-direction: column;
-  border: 1px solid #000080;
+  justify-content: flex-end;
+  margin-bottom: 20px;
 }
 
-.tabla-header {
-  display: flex;
-  background: #000080;
-  color: white;
-  flex-wrap: wrap;
-}
-
-.tabla-celda-header {
-  flex: 1 1 200px;
-  min-width: 200px;
-  padding: 12px;
-  text-align: center;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  border-right: 1px solid rgba(255, 255, 255, 0.3);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.tabla-ejemplo {
-  display: flex;
-  border-bottom: 1px solid #000080;
-  background: #f8f9fa;
-  flex-wrap: wrap;
-}
-
-.tabla-celda-ejemplo {
-  flex: 1 1 200px;
-  min-width: 200px;
-  padding: 12px;
-  text-align: center;
-  font-size: 0.8rem;
-  color: #666;
-  border-right: 1px solid #000080;
-}
-
-.tabla-fila-entrada {
-  display: flex;
-  border-bottom: 1px solid #000080;
-  flex-wrap: wrap;
-}
-
-.tabla-celda-entrada {
-  flex: 1 1 200px;
-  min-width: 200px;
-  padding: 8px;
-  border-right: 1px solid #000080;
-}
-
-.tabla-select,
-.tabla-input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-}
-
-.tabla-agregar-button {
-  padding: 12px;
-  text-align: right;
-  border-top: 1px solid #000080;
-}
-
-.tabla-agregar-button button {
+.btn-agregar {
   background: #000080;
   color: white;
   border: none;
-  padding: 8px 16px;
+  padding: 12px 24px;
   border-radius: 4px;
   cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
-/* Estilos para la nota al pie de la tabla */
-.tabla-nota {
-  font-size: 0.8rem;
+.btn-agregar:hover {
+    background: #000066;
+    transform: translateY(-2px);
+}
+
+/* Estilos para la tabla */
+.tabla-registro {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden; /* Important for border-radius on the table */
+}
+
+.tabla-registro th {
+  background: #000080;
+  color: white;
+  padding: 12px;
+  text-align: left; /* Align text to the left */
+  font-weight: 500;
+  font-size: 0.9rem;
+  white-space: nowrap; /* Prevent text wrapping in headers */
+}
+
+.tabla-registro td {
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.9rem;
+}
+
+/* Style the example row */
+.fila-ejemplo {
+  background: #f8f9fa;
   color: #666;
-  text-align: center;
   font-style: italic;
-  margin: 0;
+}
+/*No es necesario, se eliminara despues
+.fila-ejemplo td {
+  border-bottom: 1px solid #e0e0e0;
+}
+*/
+/* Estilo para el botón eliminar dentro de la tabla */
+.eliminar-registro {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.eliminar-registro:hover {
+  background: #c82333;
+  transform: translateY(-1px);
 }
 
 /* Estilos para la declaración */
@@ -455,4 +471,34 @@ h1.formulario-titulo {
   background: #002060;
   transition: all 0.3s ease;
   transform: scale(1.02);
+}
+
+/* Mejorar visibilidad de campos requeridos */
+.solicitante-input:required,
+.tabla-input:required,
+.tabla-select:required {
+    border-left: 3px solid #dc3545;
+}
+
+/* Estilo para inputs inválidos */
+.solicitante-input:invalid,
+.tabla-input:invalid {
+    border-color: #dc3545;
+    background-color: #fff8f8;
+}
+
+/* Agregar estos estilos para las coordenadas */
+.coordenadas-grupo {
+     /* Toma más espacio que los otros campos  flex: 2 !important; */
+     display: flex;
+     flex-direction: column;
+}
+
+.coordenadas-inputs {
+    display: flex;
+    gap: 10px;
+}
+
+.coordenadas-inputs input {
+    width: 50%; /* Each input takes half the space within coordenadas-inputs */
 }

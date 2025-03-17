@@ -224,19 +224,19 @@
                         <!-- Opciones -->
                         <tbody>
                             <tr>
-                                <td>PORTONES METÁLICOS EN VÍAS PEATONALES</td>
+                                <td style="text-align: justify">PORTONES METÁLICOS EN VÍAS PEATONALES</td>
                                 <td>TIPO 1</td>
                             </tr>
                             <tr>
-                                <td>PORTONES METÁLICOS EN CALLES VEHICULARES CON ACERAS MENORES A 1,50 METROS</td>
+                                <td style="text-align: justify">PORTONES METÁLICOS EN CALLES VEHICULARES CON ACERAS MENORES A 1,50 METROS</td>
                                 <td>TIPO 2</td>
                             </tr>
                             <tr>
-                                <td>PORTONES METÁLICOS EN CALLES VEHICULARES CON ACERAS IGUALES O MAYORES A 1,50 METROS</td>
+                                <td style="text-align: justify">PORTONES METÁLICOS EN CALLES VEHICULARES CON ACERAS IGUALES O MAYORES A 1,50 METROS</td>
                                 <td>TIPO 3</td>
                             </tr>
                             <tr>
-                                <td>OTROS ELEMENTOS DE SEGURIDAD</td>
+                                <td style="text-align: justify">OTROS ELEMENTOS DE SEGURIDAD</td>
                                 <td>OTROS</td>
                             </tr>
                         </tbody>
@@ -245,59 +245,77 @@
             </div>
 
             <!-- Registro de direcciones -->
-            <div class="registro-direcciones-container">
-                <!-- Tabla de registro -->
-                <div class="tabla-registro">
-                    <!-- Encabezado -->
-                    <div class="tabla-header">
-                        <div class="tabla-celda-header">Tipo de elemento de seguridad</div>
-                        <div class="tabla-celda-header">Dirección exacta donde se va a instalar el elemento de seguridad</div>
-                        <div class="tabla-celda-header">Coordenadas georreferenciadas</div>
-                        <div class="tabla-celda-header">Tipo de solicitud</div>
+            <!-- Registro de direcciones -->
+            <div class="formulario-contenedor">
+                <h2 class="solicitante-titulo">Registro de elementos de seguridad</h2>
+                <div class="registro-elementos-container">
+                    <!-- Campos de entrada -->
+                    <div class="elementos-inputs">
+                        <div class="elemento-campo">
+                            <label class="solicitante-label">
+                                <p>Tipo de elemento de seguridad</p>
+                                <select id="tipoElemento" class="solicitante-input" required="required">
+                                    <option value="">Seleccione...</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="elemento-campo">
+                            <label class="solicitante-label">
+                                <p>Dirección exacta de instalación</p>
+                                <input id="direccionElemento" type="text" class="solicitante-input" placeholder="Ingrese la dirección exacta" required="required"
+                                />
+                            </label>
+                        </div>
+                        <div class="elemento-campo coordenadas-grupo">
+                            <label class="solicitante-label">
+                                <p>Coordenadas georreferenciadas</p>
+                                <div class="coordenadas-inputs">
+                                    <input id="latitudElemento" type="number" step="any" class="solicitante-input" placeholder="Latitud" required="required"
+                                    />
+                                    <input id="longitudElemento" type="number" step="any" class="solicitante-input" placeholder="Longitud" required="required"
+                                    />
+                                </div>
+                            </label>
+                        </div>
+                        <div class="elemento-campo">
+                            <label class="solicitante-label">
+                                <p>Tipo de solicitud</p>
+                                <select id="tipoSolicitud" class="solicitante-input" required="required">
+                                    <option value="">Seleccione...</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="elemento-accion">
+                        <button type="button" onclick="agregarRegistro(event)" class="btn-agregar">Agregar elemento</button>
                     </div>
 
-                    <!-- Ejemplo -->
-                    <div class="tabla-ejemplo">
-                        <div class="tabla-celda-ejemplo">EJEMPLO</div>
-                        <div class="tabla-celda-ejemplo">Alborada 7ma etapa mz 715 villa 1 y mz 702 villa 8 ubicada en la calle 17 NE
-                        </div>
-                        <div class="tabla-celda-ejemplo">-2.141993, -79.902016</div>
-                        <div class="tabla-celda-ejemplo">REGULARIZACIÓN</div>
-                    </div>
+                    <!-- Tabla de registros -->
+                    <table class="tabla-registro">
+                        <thead>
+                            <tr>
+                                <th>Tipo de elemento</th>
+                                <th>Dirección de instalación</th>
+                                <th>Coordenadas</th>
+                                <th>Tipo de solicitud</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fila-ejemplo">
+                                <td>EJEMPLO</td>
+                                <td>Alborada 7ma etapa mz 715 villa 1 y mz 702 villa 8 ubicada en la calle 17 NE</td>
+                                <td>-2.141993, -79.902016</td>
+                                <td>REGULARIZACIÓN</td>
+                                <td></td>
+                                <!-- Empty cell for alignment -->
+                            </tr>
+                            <!--  The added rows will go here -->
+                            <tr id="registrosContainer"></tr>
+                        </tbody>
 
-                    <!-- Fila de entrada -->
-                    <div class="tabla-fila-entrada">
-                        <div class="tabla-celda-entrada">
-                            <select id="tipoElemento" class="tabla-select">
-                                <option value="">Seleccione...</option>
-                            </select>
-                        </div>
-                        <div class="tabla-celda-entrada">
-                            <input id="direccionElemento" type="text" placeholder="Ingrese la dirección exacta" class="tabla-input" />
-                        </div>
-                        <div class="tabla-celda-entrada">
-                            <input id="coordenadasElemento" type="text" placeholder="Coordenadas" class="tabla-input" />
-                        </div>
-                        <div class="tabla-celda-entrada">
-                            <select id="tipoSolicitud" class="tabla-select">
-                                <option value="">Seleccione...</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Contenedor para los registros -->
-                    <div id="registrosContainer"></div>
-
-                    <!-- Botón Agregar -->
-                    <div class="tabla-agregar-button">
-                        <button onclick="agregarRegistro()">Agregar Registro</button>
-                    </div>
+                    </table>
                 </div>
-
-                <!-- Nota para agregar más filas -->
-                <p class="tabla-nota">
-                    SI DESEA DECLARAR MÁS ELEMENTOS DE SEGURIDAD EN ESTA MATRIZ POR FAVOR INSERTE OTRAS FILAS
-                </p>
             </div>
 
             <!-- Declaración -->
