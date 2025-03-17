@@ -1,0 +1,346 @@
+<apex:page controller="BCFormularioController" contentType="text/html;charset=UTF-8" showHeader="true" sidebar="true" standardStylesheets="false">
+    <apex:stylesheet value="{!$Resource.BCEstilosActaConsetimientoYResignacion}" />
+    <apex:includeScript value="{!$Resource.BCScripts}" />
+
+    <apex:pageMessages id="mensajes" />
+
+    <apex:form id="formulario">  <!-- ¡IMPORTANTE!  Envolver todo en un apex:form -->
+        <main class="main">
+            <!-- Header con logos -->
+            <div class="header-logos">
+                <img src="{!$Resource.BCMIMG_Logo}" alt="Muy ilustre Municipio de Guayaquil" class="logo" />
+                <img src="{!$Resource.BCDireccionUEVP_Logo}" alt="Dirección de uso del Espacio y via Pública" class="logo" />
+            </div>
+
+            <!-- Título del formulario -->
+            <h1 class="formulario-titulo">
+                Formulario de solicitud para obtención del permiso temporal para la instalación de elementos de
+                seguridad en el espacio y vía pública
+            </h1>
+
+            <!-- Selector de tipo de formulario -->
+            <div class="formulario-contenedor selector-tipo">
+                <h2 class="tipoFormulario" for="tipoFormulario">Seleccionar el tipo de persona a registrar:</h2>
+                <select id="tipoFormulario" onchange="mostrarFormulario()">
+                    <option value="">Seleccionar</option>
+                    <option value="juridica">Persona jurídica</option>
+                    <option value="natural">Persona natural</option>
+                </select>
+            </div>
+
+            <!-- Formulario para Persona Jurídica -->
+            <div class="formulario-contenedor formulario-juridica">
+                <h2 class="solicitante-titulo">Solicitante - Persona Jurídica</h2>
+                <div class="solicitante-datos">
+                    <!-- Nombre de la empresa -->
+                    <div class="solicitante-campo">
+                        <label class="solicitante-label">
+                            <p>Nombre de la empresa</p>
+                            <apex:inputText value="{!cuentaNombreEmpresa}" styleClass="solicitante-input" id="nombreEmpresaJuridica"/>
+                        </label>
+                    </div>
+
+                    <!-- RUC -->
+                    <div class="solicitante-campo small">
+                        <label class="solicitante-label">
+                            <p>R.U.C.</p>
+                            <apex:inputText value="{!cuentaRuc}" styleClass="solicitante-input" id="rucJuridica"/>
+                        </label>
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="solicitante-campo full">
+                        <label class="solicitante-label">
+                            <p>Dirección exacta del domicilio</p>
+                            <apex:inputTextarea value="{!cuentaDireccion}" styleClass="solicitante-input" id="direccionJuridica"/>
+                        </label>
+                    </div>
+
+                    <!-- Correo electrónico -->
+                    <div class="solicitante-campo">
+                        <label class="solicitante-label">
+                            <p>Correo electrónico</p>
+                            <apex:inputText value="{!cuentaCorreoElectronico}" styleClass="solicitante-input" id="correoJuridica"/>
+                        </label>
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div class="solicitante-campo small">
+                        <label class="solicitante-label">
+                            <p>Teléfono</p>
+                            <apex:inputText value="{!cuentaTelefono}" styleClass="solicitante-input" id="telefonoJuridica"/>
+                        </label>
+                    </div>
+
+                    <!-- Representante legal -->
+                    <div class="solicitante-campo">
+                        <label class="solicitante-label">
+                            <p>Nombre del representante legal</p>
+                            <apex:inputText value="{!cuentaRepresentanteLegal}" styleClass="solicitante-input" id="representanteLegalJuridica"/>
+                        </label>
+                    </div>
+                    <!-- Identificacion Representante legal -->
+                    <div class="solicitante-campo">
+                        <label class="solicitante-label">
+                            <p>Identificación del representante legal</p>
+                            <apex:inputText value="{!cuentaIdentificacionRL}" styleClass="solicitante-input" id="identificacionRepresentanteJuridica"/>
+                        </label>
+                    </div>
+
+                    <!-- Subir archivo -->
+                    <div class="solicitante-campo full">
+                        <label class="solicitante-label">
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-flow: row wrap;">
+                                <p>Subir archivo del nombramiento del representante legal</p>
+                                <label for="registroFile" class="custom-file-upload">
+                                    <img src="{!$Resource.BCFlechaArriba_Logo}" alt="Subir archivo" width="20px" />
+                                </label>
+                                <apex:inputFile value="{!archivoRegistro}" fileName="{!archivoRegistroFileName}" id="registroFile" style="display:none;" onchange="actualizarCheckbox('registroFile', 'registroCheckbox')"  />
+                                <input type="checkbox" id="registroCheckbox" style="width: 20px; height: 20px; margin: 0;" disabled="true" />
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario para Persona Natural -->
+            <div class="formulario-contenedor formulario-natural">
+                <h2 class="solicitante-titulo">Solicitante - Persona Natural</h2>
+                <div class="solicitante-datos">
+                    <!-- Nombres y apellidos -->
+                    <div class="solicitante-campo">
+                        <label class="solicitante-label">
+                            <p>Nombres y apellidos del representante</p>
+                            <apex:inputText value="{!contactoNombres}" styleClass="solicitante-input" id="nombresApellidosNatural"/>
+                        </label>
+                    </div>
+
+                    <!-- CC -->
+                    <div class="solicitante-campo small">
+                        <label class="solicitante-label">
+                            <p>C.C.</p>
+                            <apex:inputText value="{!contactoIdentificacion}" styleClass="solicitante-input" id="ccNatural"/>
+                        </label>
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="solicitante-campo full">
+                        <label class="solicitante-label">
+                            <p>Dirección exacta del domicilio</p>
+                            <apex:inputTextarea value="{!contactoDireccion}" styleClass="solicitante-input" id="direccionNatural"/>
+                        </label>
+                    </div>
+
+                    <!-- Correo electrónico -->
+                    <div class="solicitante-campo">
+                        <label class="solicitante-label">
+                            <p>Correo electrónico</p>
+                            <apex:inputText value="{!contactoCorreoElectronico}" styleClass="solicitante-input" id="correoNatural"/>
+                        </label>
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div class="solicitante-campo small">
+                        <label class="solicitante-label">
+                            <p>Teléfono</p>
+                            <apex:inputText value="{!contactoTelefono}" styleClass="solicitante-input" id="telefonoNatural"/>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nota informativa -->
+            <div class="nota-informativa">
+                <p>El presente formulario debe ser completado de manera digital y debe ser impreso para su firma de forma manual</p>
+            </div>
+
+            <!-- Requisitos a cumplir -->
+            <div class="requisitos-container">
+                <div class="requisitos-titulo">
+                    <h2>Requisitos a cumplir</h2>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <!-- Acta -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
+                        <p style="font-size: 0.9rem; margin: 0; width: 100%;">• Acta suscrita por todos los miembros que conforman el colectivo o comunidad solicitante.</p>
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-flow: row wrap; width: 30%;">
+                            <label for="actaFile" class="custom-file-upload">Subir Archivo</label>
+                            <apex:inputFile value="{!archivoActa}" fileName="{!archivoActaFileName}" id="actaFile" style="display:none;" onchange="actualizarCheckbox('actaFile', 'actaCheckbox')" />
+                            <input type="checkbox" id="actaCheckbox" style="width: 20px; height: 20px; margin: 0;" disabled="true" />
+                        </div>
+                    </div>
+
+                    <!-- Planos -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
+                        <p style="font-size: 0.9rem; margin: 0; width: 100%;">• Planos del proyecto de los elementos de seguridad a instalarse con firma de responsabilidad técnica.</p>
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-flow: row wrap; width: 30%;">
+                            <label for="planosFile" class="custom-file-upload">Subir Archivo</label>
+                            <apex:inputFile value="{!archivoPlanos}" fileName="{!archivoPlanosFileName}" id="planosFile" style="display:none;" onchange="actualizarCheckbox('planosFile', 'planosCheckbox')" />
+                            <input type="checkbox" id="planosCheckbox" style="width: 20px; height: 20px; margin: 0;" disabled="true" />
+                        </div>
+                    </div>
+
+                    <!-- Fotos -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
+                        <p style="font-size: 0.9rem; margin: 0; width: 100%;">• Fotografías del sitio donde se propone instalar los elementos de seguridad en el espacio y vía pública.</p>
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-flow: row wrap; width: 30%;">
+                            <label for="fotosFile" class="custom-file-upload">Subir Archivo</label>
+                            <apex:inputFile value="{!archivoFotos}" fileName="{!archivoFotosFileName}" id="fotosFile" style="display:none;" onchange="actualizarCheckbox('fotosFile', 'fotosCheckbox')" />
+                            <input type="checkbox" id="fotosCheckbox" style="width: 20px; height: 20px; margin: 0;" disabled="true" />
+                        </div>
+                    </div>
+
+                    <!-- Comprobante -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
+                        <p style="font-size: 0.9rem; margin: 0; width: 100%;">• Comprobante de Pago de Tasa por Servicios Administrativos.</p>
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-flow: row wrap; width: 30%;">
+                            <label for="comprobanteFile" class="custom-file-upload">Subir Archivo</label>
+                            <apex:inputFile value="{!archivoComprobante}" fileName="{!archivoComprobanteFileName}" id="comprobanteFile" style="display:none;" onchange="actualizarCheckbox('comprobanteFile', 'comprobanteCheckbox')" />
+                            <input type="checkbox" id="comprobanteCheckbox" style="width: 20px; height: 20px; margin: 0;" disabled="true" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="requisitos-especificos">
+                    <p>
+                        * Los miembros del colectivo o comunidad solicitante deben estar al día en el pago del impuesto
+                        predial y tasa de recolección de desechos sólidos no peligrosos, cuya verificación estará a cargo
+                        del Gobierno Autónomo Descentralizado Municipal de Guayaquil
+                    </p>
+                </div>
+
+                <!-- Elementos de Seguridad -->
+                <div class="elementos-seguridad-container">
+                    <table class="elementos-seguridad-tabla">
+                        <!-- Encabezado -->
+                        <thead>
+                            <tr>
+                                <th>Elemento de seguridad instalado o por instalar</th>
+                                <th>Tipo</th>
+                            </tr>
+                        </thead>
+                        <!-- Opciones -->
+                        <tbody>
+                            <tr>
+                                <td>PORTONES METÁLICOS EN VÍAS PEATONALES</td>
+                                <td>TIPO 1</td>
+                            </tr>
+                            <tr>
+                                <td>PORTONES METÁLICOS EN CALLES VEHICULARES CON ACERAS MENORES A 1,50 METROS</td>
+                                <td>TIPO 2</td>
+                            </tr>
+                            <tr>
+                                <td>PORTONES METÁLICOS EN CALLES VEHICULARES CON ACERAS IGUALES O MAYORES A 1,50 METROS</td>
+                                <td>TIPO 3</td>
+                            </tr>
+                            <tr>
+                                <td>OTROS ELEMENTOS DE SEGURIDAD</td>
+                                <td>OTROS</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Registro de direcciones -->
+            <div class="registro-direcciones-container">
+                <!-- Tabla de registro -->
+                <div class="tabla-registro">
+                    <!-- Encabezado -->
+                    <div class="tabla-header">
+                        <div class="tabla-celda-header">Tipo de elemento de seguridad</div>
+                        <div class="tabla-celda-header">Dirección exacta donde se va a instalar el elemento de seguridad</div>
+                        <div class="tabla-celda-header">Coordenadas georreferenciadas</div>
+                        <div class="tabla-celda-header">Tipo de solicitud</div>
+                    </div>
+
+                    <!-- Ejemplo -->
+                    <div class="tabla-ejemplo">
+                        <div class="tabla-celda-ejemplo">EJEMPLO</div>
+                        <div class="tabla-celda-ejemplo">Alborada 7ma etapa mz 715 villa 1 y mz 702 villa 8 ubicada en la calle 17 NE</div>
+                        <div class="tabla-celda-ejemplo">-2.141993, -79.902016</div>
+                        <div class="tabla-celda-ejemplo">REGULARIZACIÓN</div>
+                    </div>
+
+                    <!-- Fila de entrada -->
+                    <div class="tabla-fila-entrada">
+                         <div class="tabla-celda-entrada">
+                            <apex:selectList value="{!auxTipoElemento}" size="1" styleClass="tabla-select" id="tipoElemento">
+                                <apex:selectOptions value="{!opcionesTipoElemento}"/>
+                            </apex:selectList>
+                        </div>
+                        <div class="tabla-celda-entrada">
+                            <apex:inputText value="{!auxDireccionElemento}" styleClass="tabla-input" id="direccionElemento"  placeholder="Ingrese la dirección exacta" />
+                        </div>
+                        <div class="tabla-celda-entrada">
+                            <apex:inputText value="{!auxCoordenadasElemento}" styleClass="tabla-input" id="coordenadasElemento" placeholder="Coordenadas" />
+                        </div>
+                        <div class="tabla-celda-entrada">
+                             <apex:selectList value="{!auxTipoSolicitud}" size="1"  styleClass="tabla-select" id="tipoSolicitud">
+                                <apex:selectOptions value="{!opcionesTipoSolicitud}"/>
+                            </apex:selectList>
+                        </div>
+                    </div>
+
+                    <!-- Contenedor para los registros -->
+                    <div id="registrosContainer"></div>
+
+                    <!-- Botón Agregar -->
+                    <div class="tabla-agregar-button">
+                         <apex:commandButton action="{!agregarDireccion}" value="Agregar Registro" rerender="formulario" styleClass="btn btn-primary" />
+                    </div>
+                </div>
+
+                <!-- Nota para agregar más filas -->
+                <p class="tabla-nota">
+                    SI DESEA DECLARAR MÁS ELEMENTOS DE SEGURIDAD EN ESTA MATRIZ POR FAVOR INSERTE OTRAS FILAS
+                </p>
+            </div>
+
+            <!-- Declaración -->
+            <div class="declaracion-container">
+                <!-- Título -->
+                <div class="declaracion-titulo">
+                    <h2>Declaración:</h2>
+                </div>
+
+                <!-- Contenido de la declaración -->
+                <div class="declaracion-contenido">
+                    <p>
+                        1. Cuando en un procedimiento sancionador se determine el retiro de un elemento de seguridad y el
+                        representante responsable del colectivo o comunidad no solicite la devolución en el plazo de 30 días
+                        contemplado en la Ordenanza que regula la ocupación del espacio o vía pública mediante la
+                        instalación de elementos de seguridad en el cantón Guayaquil, en mi calidad de representante
+                        responsable acepto expresamente que dichos bienes pasan a ser entregados al Gobierno Autónomo
+                        Descentralizado Municipal de Guayaquil para su disposición final.
+                    </p>
+
+                    <p>
+                        2. En mi calidad de representante responsable del colectivo o comunidad, mediante la suscripción del
+                        presente formulario acepto ser notificado mediante el correo electrónico que se declara en la
+                        presente solicitud.
+                    </p>
+
+                    <p>
+                        3. En mi calidad de representante responsable del colectivo o comunidad declaro de manera libre y
+                        voluntaria, que la información proporcionada se sujeta estrictamente a la verdad, dejando constancia
+                        que me someto a las sanciones penales y tributarias establecidas en la ley, para el caso de incurrir
+                        en falsedades.
+                    </p>
+                </div>
+
+                <div class="terminos-condiciones">
+                    <apex:inputCheckbox id="aceptaTerminos"/>
+                    <p>Acepto los términos y condiciones</p>
+                </div>
+            </div>
+
+            <div class="enviar-formulario">
+                <apex:commandButton action="{!guardar}" value="Enviar Formulario" styleClass="btn btn-primary" />
+                <apex:commandButton action="{!cancelar}" value="Cancelar" immediate="true" styleClass="btn btn-secondary" />
+            </div>
+        </main>
+        <!-- Cierre correcto de la etiqueta main -->
+        </apex:form>
+</apex:page>
