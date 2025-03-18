@@ -300,8 +300,6 @@ h1.formulario-titulo {
   gap: 20px;
 }
 
-.elemento-campo {}
-
 .elemento-accion {
   display: flex;
   justify-content: flex-end;
