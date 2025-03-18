@@ -1,363 +1,626 @@
-<apex:page controller="BCFormularioController" contentType="text/html;charset=UTF-8" showHeader="true" sidebar="true" standardStylesheets="false">
-    <apex:stylesheet value="{!$Resource.BCEstilosActaConsetimientoYResignacion}" />
-    <apex:includeScript value="{!$Resource.BCScripts}" />
+<apex:page
+  controller="BCFormularioController"
+  contentType="text/html;charset=UTF-8"
+  showHeader="true"
+  sidebar="true"
+  standardStylesheets="false"
+>
+  <apex:stylesheet
+    value="{!$Resource.BCEstilosActaConsetimientoYResignacion}"
+  />
+  <apex:includeScript value="{!$Resource.BCScripts}" />
 
-    <apex:pageMessages id="mensajes" />
+  <apex:pageMessages id="mensajes" />
 
-    <apex:form id="formulario">
-        <!-- ¡IMPORTANTE!  Envolver todo en un apex:form -->
-        <main class="main">
-            <!-- Header con logos -->
-            <div class="header-logos">
-                <img src="{!$Resource.BCMIMG_Logo}" alt="Muy ilustre Municipio de Guayaquil" class="logo" />
-                <img src="{!$Resource.BCDireccionUEVP_Logo}" alt="Dirección de uso del Espacio y via Pública" class="logo" />
+  <apex:form id="formulario">
+    <!-- ¡IMPORTANTE!  Envolver todo en un apex:form -->
+    <main class="main">
+      <!-- Header con logos -->
+      <div class="header-logos">
+        <img
+          src="{!$Resource.BCMIMG_Logo}"
+          alt="Muy ilustre Municipio de Guayaquil"
+          class="logo"
+        />
+        <img
+          src="{!$Resource.BCDireccionUEVP_Logo}"
+          alt="Dirección de uso del Espacio y via Pública"
+          class="logo"
+        />
+      </div>
+
+      <!-- Título del formulario -->
+      <h1 class="formulario-titulo">
+        Formulario de solicitud para obtención del permiso temporal para la
+        instalación de elementos de seguridad en el espacio y vía pública
+      </h1>
+
+      <!-- Selector de tipo de formulario -->
+      <div class="formulario-contenedor selector-tipo">
+        <h2 class="tipoFormulario" for="tipoFormulario">
+          Seleccionar el tipo de persona a registrar:
+        </h2>
+        <select id="tipoFormulario" onchange="mostrarFormulario()">
+          <option value="">Seleccionar</option>
+          <option value="juridica">Persona jurídica</option>
+          <option value="natural">Persona natural</option>
+        </select>
+      </div>
+
+      <!-- Formulario para Persona Jurídica -->
+      <div class="formulario-contenedor formulario-juridica">
+        <h2 class="solicitante-titulo">Solicitante - Persona Jurídica</h2>
+        <div class="solicitante-datos">
+          <!-- Nombres y apellidos -->
+          <div class="solicitante-campo">
+            <label class="solicitante-label">
+              <p>Nombre de la empresa</p>
+              <input
+                type="text"
+                class="solicitante-input"
+                id="nombreEmpresaJuridica"
+              />
+            </label>
+          </div>
+
+          <!-- RUC -->
+          <div class="solicitante-campo small">
+            <label class="solicitante-label">
+              <p>R.U.C.</p>
+              <input type="text" class="solicitante-input" id="rucJuridica" />
+            </label>
+          </div>
+
+          <!-- Dirección -->
+          <div class="solicitante-campo full">
+            <label class="solicitante-label">
+              <p>Dirección exacta del domicilio</p>
+              <input
+                type="text"
+                class="solicitante-input"
+                id="direccionJuridica"
+              />
+            </label>
+          </div>
+
+          <!-- Correo electrónico -->
+          <div class="solicitante-campo">
+            <label class="solicitante-label">
+              <p>Correo electrónico</p>
+              <input
+                type="email"
+                class="solicitante-input"
+                id="correoJuridica"
+              />
+            </label>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="solicitante-campo small">
+            <label class="solicitante-label">
+              <p>Teléfono</p>
+              <input
+                type="tel"
+                class="solicitante-input"
+                id="telefonoJuridica"
+              />
+            </label>
+          </div>
+
+          <div class="solicitante-campo">
+            <label class="solicitante-label">
+              <p>Nombre del reprensentante legal</p>
+              <input
+                type="text"
+                class="solicitante-input"
+                id="representanteLegalJuridica"
+              />
+            </label>
+          </div>
+
+          <div class="solicitante-campo">
+            <label class="solicitante-label">
+              <p>Identificacion del reprensentate legal</p>
+              <input
+                type="text"
+                class="solicitante-input"
+                id="identificacionRepresentanteJuridica"
+              />
+            </label>
+          </div>
+
+          <!-- Subir archivo -->
+          <div class="solicitante-campo full">
+            <label class="solicitante-label">
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  gap: 10px;
+                  flex-flow: row wrap;
+                "
+              >
+                <p>Subir archivo del nombramiento del representate legal</p>
+                <label for="registroFile" class="custom-file-upload">
+                  <img
+                    src="{!$Resource.BCFlechaArriba_Logo}"
+                    alt="Subir archivo"
+                    width="20px"
+                  />
+                </label>
+                <input
+                  type="file"
+                  id="registroFile"
+                  style="display: none"
+                  onchange="actualizarCheckbox('registroFile', 'registroCheckbox')"
+                />
+                <input
+                  type="checkbox"
+                  id="registroCheckbox"
+                  style="width: 20px; height: 20px; margin: 0"
+                  disabled="true"
+                />
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario para Persona Natural -->
+      <div class="formulario-contenedor formulario-natural">
+        <h2 class="solicitante-titulo">Solicitante - Persona Natural</h2>
+        <div class="solicitante-datos">
+          <!-- Nombres y apellidos -->
+          <div class="solicitante-campo">
+            <label class="solicitante-label">
+              <p>Nombres y apellidos del representante</p>
+              <input
+                type="text"
+                class="solicitante-input"
+                id="nombresApellidosNatural"
+              />
+            </label>
+          </div>
+
+          <!-- CC -->
+          <div class="solicitante-campo small">
+            <label class="solicitante-label">
+              <p>C.C.</p>
+              <input type="text" class="solicitante-input" id="ccNatural" />
+            </label>
+          </div>
+
+          <!-- Dirección -->
+          <div class="solicitante-campo full">
+            <label class="solicitante-label">
+              <p>Dirección exacta del domicilio</p>
+              <input
+                type="text"
+                class="solicitante-input"
+                id="direccionNatural"
+              />
+            </label>
+          </div>
+
+          <!-- Correo electrónico -->
+          <div class="solicitante-campo">
+            <label class="solicitante-label">
+              <p>Correo electrónico</p>
+              <input
+                type="email"
+                class="solicitante-input"
+                id="correoNatural"
+              />
+            </label>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="solicitante-campo small">
+            <label class="solicitante-label">
+              <p>Teléfono</p>
+              <input
+                type="tel"
+                class="solicitante-input"
+                id="telefonoNatural"
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nota informativa -->
+      <div class="nota-informativa">
+        <p>
+          El presente formulario debe ser completado de manera digital y debe
+          ser impreso para su firma de forma manual
+        </p>
+      </div>
+
+      <!-- Requisitos a cumplir -->
+      <div class="requisitos-container">
+        <div class="requisitos-titulo">
+          <h2>Requisitos a cumplir</h2>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 15px">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              gap: 20px;
+            "
+          >
+            <p style="font-size: 0.9rem; margin: 0; width: 100%">
+              1.- Acta suscrita por todos los miembros que conforman el
+              colectivo o comunidad solicitante.
+            </p>
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                flex-flow: row wrap;
+                width: 30%;
+              "
+            >
+              <label for="actaFile" class="custom-file-upload"
+                >Subir Acta</label
+              >
+              <input
+                type="file"
+                id="actaFile"
+                style="display: none"
+                onchange="actualizarCheckbox('actaFile', 'actaCheckbox', 'actaNombreArchivo')"
+              />
+              <input
+                type="checkbox"
+                id="actaCheckbox"
+                style="width: 20px; height: 20px; margin: 0"
+                disabled="true"
+              />
+              <span id="actaNombreArchivo"></span>
+              <!-- Elemento para mostrar el nombre del archivo -->
             </div>
+          </div>
 
-            <!-- Título del formulario -->
-            <h1 class="formulario-titulo">
-                Formulario de solicitud para obtención del permiso temporal para la instalación de elementos de seguridad en el espacio y
-                vía pública
-            </h1>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              gap: 20px;
+            "
+          >
+            <p style="font-size: 0.9rem; margin: 0; width: 100%">
+              2.- Planos del proyecto de los elementos de seguridad a instalarse
+              con firma de responsabilidad técnica.
+            </p>
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                flex-flow: row wrap;
+                width: 30%;
+              "
+            >
+              <label for="planosFile" class="custom-file-upload"
+                >Subir Plano</label
+              >
+              <input
+                type="file"
+                id="planosFile"
+                style="display: none"
+                onchange="actualizarCheckbox('planosFile', 'planosCheckbox', 'planosNombreArchivo')"
+              />
+              <input
+                type="checkbox"
+                id="planosCheckbox"
+                style="width: 20px; height: 20px; margin: 0"
+                disabled="true"
+              />
+              <span id="planosNombreArchivo"></span>
+              <!-- Elemento para mostrar el nombre del archivo -->
+            </div>
+          </div>
 
-            <!-- Selector de tipo de formulario -->
-            <div class="formulario-contenedor selector-tipo">
-                <h2 class="tipoFormulario" for="tipoFormulario">Seleccionar el tipo de persona a registrar:</h2>
-                <select id="tipoFormulario" onchange="mostrarFormulario()">
-                    <option value="">Seleccionar</option>
-                    <option value="juridica">Persona jurídica</option>
-                    <option value="natural">Persona natural</option>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              gap: 20px;
+            "
+          >
+            <p style="font-size: 0.9rem; margin: 0; width: 100%">
+              3.- Fotografías del sitio donde se propone instalar los elementos
+              de seguridad en el espacio y vía pública.
+            </p>
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                flex-flow: row wrap;
+                width: 30%;
+              "
+            >
+              <label for="fotosFile" class="custom-file-upload"
+                >Subir PDF</label
+              >
+              <input
+                type="file"
+                id="fotosFile"
+                style="display: none"
+                onchange="actualizarCheckbox('fotosFile', 'fotosCheckbox', 'fotosNombreArchivo')"
+              />
+              <input
+                type="checkbox"
+                id="fotosCheckbox"
+                style="width: 20px; height: 20px; margin: 0"
+                disabled="true"
+              />
+              <span id="fotosNombreArchivo"></span>
+              <!-- Elemento para mostrar el nombre del archivo -->
+            </div>
+          </div>
+
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              gap: 20px;
+            "
+          >
+            <p style="font-size: 0.9rem; margin: 0; width: 100%">
+              4.- Comprobante de Pago de Tasa por Servicios Administrativos.
+            </p>
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                flex-flow: row wrap;
+                width: 30%;
+              "
+            >
+              <label for="comprobanteFile" class="custom-file-upload"
+                >Subir Comprobante</label
+              >
+              <input
+                type="file"
+                id="comprobanteFile"
+                style="display: none"
+                onchange="actualizarCheckbox('comprobanteFile', 'comprobanteCheckbox', 'comprobanteNombreArchivo')"
+              />
+              <input
+                type="checkbox"
+                id="comprobanteCheckbox"
+                style="width: 20px; height: 20px; margin: 0"
+                disabled="true"
+              />
+              <span id="comprobanteNombreArchivo"></span>
+              <!-- Elemento para mostrar el nombre del archivo -->
+            </div>
+          </div>
+        </div>
+
+        <div class="requisitos-especificos">
+          <p>
+            * Los miembros del colectivo o comunidad solicitante deben estar al
+            día en el pago del impuesto predial y tasa de recolección de
+            desechos sólidos no peligrosos, cuya verificación estará a cargo del
+            Gobierno Autónomo Descentralizado Municipal de Guayaquil
+          </p>
+        </div>
+
+        <!-- Elementos de Seguridad -->
+        <div class="elementos-seguridad-container">
+          <table class="elementos-seguridad-tabla">
+            <!-- Encabezado -->
+            <thead>
+              <tr>
+                <th>Elemento de seguridad instalado o por instalar</th>
+                <th>Tipo</th>
+              </tr>
+            </thead>
+            <!-- Opciones -->
+            <tbody>
+              <tr>
+                <td style="text-align: justify">
+                  PORTONES METÁLICOS EN VÍAS PEATONALES
+                </td>
+                <td>TIPO 1</td>
+              </tr>
+              <tr>
+                <td style="text-align: justify">
+                  PORTONES METÁLICOS EN CALLES VEHICULARES CON ACERAS MENORES A
+                  1,50 METROS
+                </td>
+                <td>TIPO 2</td>
+              </tr>
+              <tr>
+                <td style="text-align: justify">
+                  PORTONES METÁLICOS EN CALLES VEHICULARES CON ACERAS IGUALES O
+                  MAYORES A 1,50 METROS
+                </td>
+                <td>TIPO 3</td>
+              </tr>
+              <tr>
+                <td style="text-align: justify">
+                  OTROS ELEMENTOS DE SEGURIDAD
+                </td>
+                <td>OTROS</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Registro de direcciones -->
+      <!-- Registro de direcciones -->
+      <div class="formulario-contenedor">
+        <h2 class="solicitante-titulo">Registro de elementos de seguridad</h2>
+        <div class="registro-elementos-container">
+          <!-- Campos de entrada -->
+          <div class="elementos-inputs">
+            <div class="elemento-campo">
+              <label class="solicitante-label">
+                <p>Tipo de elemento de seguridad</p>
+                <select
+                  id="tipoElemento"
+                  class="solicitante-input"
+                  required="required"
+                >
+                  <option value="">Seleccione...</option>
                 </select>
+              </label>
             </div>
-
-            <!-- Formulario para Persona Jurídica -->
-            <div class="formulario-contenedor formulario-juridica">
-                <h2 class="solicitante-titulo">Solicitante - Persona Jurídica</h2>
-                <div class="solicitante-datos">
-                    <!-- Nombres y apellidos -->
-                    <div class="solicitante-campo">
-                        <label class="solicitante-label">
-                            <p>Nombre de la empresa</p>
-                            <input type="text" class="solicitante-input" id="nombreEmpresaJuridica" />
-                        </label>
-                    </div>
-
-                    <!-- RUC -->
-                    <div class="solicitante-campo small">
-                        <label class="solicitante-label">
-                            <p>R.U.C.</p>
-                            <input type="text" class="solicitante-input" id="rucJuridica" />
-                        </label>
-                    </div>
-
-                    <!-- Dirección -->
-                    <div class="solicitante-campo full">
-                        <label class="solicitante-label">
-                            <p>Dirección exacta del domicilio</p>
-                            <input type="text" class="solicitante-input" id="direccionJuridica" />
-                        </label>
-                    </div>
-
-                    <!-- Correo electrónico -->
-                    <div class="solicitante-campo">
-                        <label class="solicitante-label">
-                            <p>Correo electrónico</p>
-                            <input type="email" class="solicitante-input" id="correoJuridica" />
-                        </label>
-                    </div>
-
-                    <!-- Teléfono -->
-                    <div class="solicitante-campo small">
-                        <label class="solicitante-label">
-                            <p>Teléfono</p>
-                            <input type="tel" class="solicitante-input" id="telefonoJuridica" />
-                        </label>
-                    </div>
-
-                    <div class="solicitante-campo">
-                        <label class="solicitante-label">
-                            <p>Nombre del reprensentante legal</p>
-                            <input type="text" class="solicitante-input" id="representanteLegalJuridica" />
-                        </label>
-                    </div>
-
-                    <div class="solicitante-campo">
-                        <label class="solicitante-label">
-                            <p>Identificacion del reprensentate legal</p>
-                            <input type="text" class="solicitante-input" id="identificacionRepresentanteJuridica" />
-                        </label>
-                    </div>
-
-                    <!-- Subir archivo -->
-                    <div class="solicitante-campo full">
-                        <label class="solicitante-label">
-                            <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-flow: row wrap;">
-                                <p>Subir archivo del nombramiento del representate legal</p>
-                                <label for="registroFile" class="custom-file-upload">
-                                    <img src="{!$Resource.BCFlechaArriba_Logo}" alt="Subir archivo" width="20px" />
-                                </label>
-                                <input type="file" id="registroFile" style="display:none;" onchange="actualizarCheckbox('registroFile', 'registroCheckbox')"
-                                />
-                                <input type="checkbox" id="registroCheckbox" style="width: 20px; height: 20px; margin: 0;" disabled="true" />
-                            </div>
-                        </label>
-                    </div>
-                </div>
+            <div class="elemento-campo">
+              <label class="solicitante-label">
+                <p>Dirección exacta de instalación</p>
+                <input
+                  id="direccionElemento"
+                  type="text"
+                  class="solicitante-input"
+                  placeholder="Ingrese la dirección exacta"
+                  required="required"
+                />
+              </label>
             </div>
-
-            <!-- Formulario para Persona Natural -->
-            <div class="formulario-contenedor formulario-natural">
-                <h2 class="solicitante-titulo">Solicitante - Persona Natural</h2>
-                <div class="solicitante-datos">
-                    <!-- Nombres y apellidos -->
-                    <div class="solicitante-campo">
-                        <label class="solicitante-label">
-                            <p>Nombres y apellidos del representante</p>
-                            <input type="text" class="solicitante-input" id="nombresApellidosNatural" />
-                        </label>
-                    </div>
-
-                    <!-- CC -->
-                    <div class="solicitante-campo small">
-                        <label class="solicitante-label">
-                            <p>C.C.</p>
-                            <input type="text" class="solicitante-input" id="ccNatural" />
-                        </label>
-                    </div>
-
-                    <!-- Dirección -->
-                    <div class="solicitante-campo full">
-                        <label class="solicitante-label">
-                            <p>Dirección exacta del domicilio</p>
-                            <input type="text" class="solicitante-input" id="direccionNatural" />
-                        </label>
-                    </div>
-
-                    <!-- Correo electrónico -->
-                    <div class="solicitante-campo">
-                        <label class="solicitante-label">
-                            <p>Correo electrónico</p>
-                            <input type="email" class="solicitante-input" id="correoNatural" />
-                        </label>
-                    </div>
-
-                    <!-- Teléfono -->
-                    <div class="solicitante-campo small">
-                        <label class="solicitante-label">
-                            <p>Teléfono</p>
-                            <input type="tel" class="solicitante-input" id="telefonoNatural" />
-                        </label>
-                    </div>
+            <div class="elemento-campo coordenadas-grupo">
+              <label class="solicitante-label">
+                <p>Coordenadas georreferenciadas</p>
+                <div class="coordenadas-inputs">
+                  <input
+                    id="latitudElemento"
+                    type="number"
+                    step="any"
+                    class="solicitante-input"
+                    placeholder="Latitud"
+                    required="required"
+                  />
+                  <input
+                    id="longitudElemento"
+                    type="number"
+                    step="any"
+                    class="solicitante-input"
+                    placeholder="Longitud"
+                    required="required"
+                  />
                 </div>
+              </label>
             </div>
-
-            <!-- Nota informativa -->
-            <div class="nota-informativa">
-                <p>El presente formulario debe ser completado de manera digital y debe ser impreso para su firma de forma manual
-                </p>
+            <div class="elemento-campo">
+              <label class="solicitante-label">
+                <p>Tipo de solicitud</p>
+                <select
+                  id="tipoSolicitud"
+                  class="solicitante-input"
+                  required="required"
+                >
+                  <option value="">Seleccione...</option>
+                </select>
+              </label>
             </div>
+          </div>
+          <div class="elemento-accion">
+            <button
+              type="button"
+              onclick="agregarRegistro(event)"
+              class="btn-agregar"
+            >
+              Agregar elemento
+            </button>
+          </div>
 
-            <!-- Requisitos a cumplir -->
-            <div class="requisitos-container">
-                <div class="requisitos-titulo">
-                    <h2>Requisitos a cumplir</h2>
-                </div>
+          <!-- Tabla de registros -->
+          <table class="tabla-registro">
+            <thead>
+              <tr>
+                <th style="width: 20%; text-align: center">Tipo de elemento</th>
+                <!-- Ajusta los anchos según sea necesario -->
+                <th style="width: 40%; text-align: center">
+                  Dirección de instalación
+                </th>
+                <th style="width: 15%; text-align: center">Coordenadas</th>
+                <th style="width: 15%; text-align: center">
+                  Tipo de solicitud
+                </th>
+                <th style="width: 10%; text-align: center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="fila-ejemplo">
+                <td>EJEMPLO</td>
+                <td>
+                  Alborada 7ma etapa mz 715 villa 1 y mz 702 villa 8 ubicada en
+                  la calle 17 NE
+                </td>
+                <td>-2.141993, -79.902016</td>
+                <td>REGULARIZACIÓN</td>
+                <td></td>
+              </tr>
+              <!--  The added rows will go here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
-                        <p style="font-size: 0.9rem; margin: 0; width: 100%;">• Acta suscrita por todos los miembros que conforman el colectivo o comunidad solicitante.</p>
-                        <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-flow: row wrap; width: 30%;">
-                            <label for="actaFile" class="custom-file-upload">Subir Archivo</label>
-                            <input type="file" id="actaFile" style="display:none;" onchange="actualizarCheckbox('actaFile', 'actaCheckbox')" />
-                            <input type="checkbox" id="actaCheckbox" style="width: 20px; height: 20px; margin: 0;" disabled="true" />
-                        </div>
-                    </div>
+      <!-- Declaración -->
+      <div class="declaracion-container">
+        <!-- Título -->
+        <div class="declaracion-titulo">
+          <h2>Declaración:</h2>
+        </div>
 
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
-                        <p style="font-size: 0.9rem; margin: 0; width: 100%;">• Planos del proyecto de los elementos de seguridad a instalarse con firma de responsabilidad técnica.
-                        </p>
-                        <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-flow: row wrap; width: 30%;">
-                            <label for="planosFile" class="custom-file-upload">Subir Archivo</label>
-                            <input type="file" id="planosFile" style="display:none;" onchange="actualizarCheckbox('planosFile', 'planosCheckbox')" />
-                            <input type="checkbox" id="planosCheckbox" style="width: 20px; height: 20px; margin: 0;" disabled="true" />
-                        </div>
-                    </div>
+        <!-- Contenido de la declaración -->
+        <div class="declaracion-contenido">
+          <p>
+            1. Cuando en un procedimiento sancionador se determine el retiro de
+            un elemento de seguridad y el representante responsable del
+            colectivo o comunidad no solicite la devolución en el plazo de 30
+            días contemplado en la Ordenanza que regula la ocupación del espacio
+            o vía pública mediante la instalación de elementos de seguridad en
+            el cantón Guayaquil, en mi calidad de representante responsable
+            acepto expresamente que dichos bienes pasan a ser entregados al
+            Gobierno Autónomo Descentralizado Municipal de Guayaquil para su
+            disposición final.
+          </p>
 
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
-                        <p style="font-size: 0.9rem; margin: 0; width: 100%;">• Fotografías del sitio donde se propone instalar los elementos de seguridad en el espacio y vía
-                            pública. </p>
-                        <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-flow: row wrap; width: 30%;">
-                            <label for="fotosFile" class="custom-file-upload">Subir Archivo</label>
-                            <input type="file" id="fotosFile" style="display:none;" onchange="actualizarCheckbox('fotosFile', 'fotosCheckbox')" />
-                            <input type="checkbox" id="fotosCheckbox" style="width: 20px; height: 20px; margin: 0;" disabled="true" />
-                        </div>
-                    </div>
+          <p>
+            2. En mi calidad de representante responsable del colectivo o
+            comunidad, mediante la suscripción del presente formulario acepto
+            ser notificado mediante el correo electrónico que se declara en la
+            presente solicitud.
+          </p>
 
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
-                        <p style="font-size: 0.9rem; margin: 0; width: 100%;">• Comprobante de Pago de Tasa por Servicios Administrativos. </p>
-                        <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-flow: row wrap; width: 30%;">
-                            <label for="comprobanteFile" class="custom-file-upload">Subir Archivo</label>
-                            <input type="file" id="comprobanteFile" style="display:none;" onchange="actualizarCheckbox('comprobanteFile', 'comprobanteCheckbox')"
-                            />
-                            <input type="checkbox" id="comprobanteCheckbox" style="width: 20px; height: 20px; margin: 0;" disabled="true" />
-                        </div>
-                    </div>
-                </div>
+          <p>
+            3. En mi calidad de representante responsable del colectivo o
+            comunidad declaro de manera libre y voluntaria, que la información
+            proporcionada se sujeta estrictamente a la verdad, dejando
+            constancia que me someto a las sanciones penales y tributarias
+            establecidas en la ley, para el caso de incurrir en falsedades.
+          </p>
+        </div>
 
-                <div class="requisitos-especificos">
-                    <p>
-                        * Los miembros del colectivo o comunidad solicitante deben estar al día en el pago del impuesto predial y tasa de recolección
-                        de desechos sólidos no peligrosos, cuya verificación estará a cargo del Gobierno Autónomo Descentralizado
-                        Municipal de Guayaquil
-                    </p>
-                </div>
+        <div class="terminos-condiciones">
+          <input type="checkbox" id="aceptaTerminos" />
+          <p>Acepto los terminos y condiciones</p>
+        </div>
+      </div>
 
-                <!-- Elementos de Seguridad -->
-                <div class="elementos-seguridad-container">
-                    <table class="elementos-seguridad-tabla">
-                        <!-- Encabezado -->
-                        <thead>
-                            <tr>
-                                <th>Elemento de seguridad instalado o por instalar</th>
-                                <th>Tipo</th>
-                            </tr>
-                        </thead>
-                        <!-- Opciones -->
-                        <tbody>
-                            <tr>
-                                <td style="text-align: justify">PORTONES METÁLICOS EN VÍAS PEATONALES</td>
-                                <td>TIPO 1</td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: justify">PORTONES METÁLICOS EN CALLES VEHICULARES CON ACERAS MENORES A 1,50 METROS</td>
-                                <td>TIPO 2</td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: justify">PORTONES METÁLICOS EN CALLES VEHICULARES CON ACERAS IGUALES O MAYORES A 1,50 METROS</td>
-                                <td>TIPO 3</td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: justify">OTROS ELEMENTOS DE SEGURIDAD</td>
-                                <td>OTROS</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Registro de direcciones -->
-            <!-- Registro de direcciones -->
-            <div class="formulario-contenedor">
-                <h2 class="solicitante-titulo">Registro de elementos de seguridad</h2>
-                <div class="registro-elementos-container">
-                    <!-- Campos de entrada -->
-                    <div class="elementos-inputs">
-                        <div class="elemento-campo">
-                            <label class="solicitante-label">
-                                <p>Tipo de elemento de seguridad</p>
-                                <select id="tipoElemento" class="solicitante-input" required="required">
-                                    <option value="">Seleccione...</option>
-                                </select>
-                            </label>
-                        </div>
-                        <div class="elemento-campo">
-                            <label class="solicitante-label">
-                                <p>Dirección exacta de instalación</p>
-                                <input id="direccionElemento" type="text" class="solicitante-input" placeholder="Ingrese la dirección exacta" required="required"
-                                />
-                            </label>
-                        </div>
-                        <div class="elemento-campo coordenadas-grupo">
-                            <label class="solicitante-label">
-                                <p>Coordenadas georreferenciadas</p>
-                                <div class="coordenadas-inputs">
-                                    <input id="latitudElemento" type="number" step="any" class="solicitante-input" placeholder="Latitud" required="required"
-                                    />
-                                    <input id="longitudElemento" type="number" step="any" class="solicitante-input" placeholder="Longitud" required="required"
-                                    />
-                                </div>
-                            </label>
-                        </div>
-                        <div class="elemento-campo">
-                            <label class="solicitante-label">
-                                <p>Tipo de solicitud</p>
-                                <select id="tipoSolicitud" class="solicitante-input" required="required">
-                                    <option value="">Seleccione...</option>
-                                </select>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="elemento-accion">
-                        <button type="button" onclick="agregarRegistro(event)" class="btn-agregar">Agregar elemento</button>
-                    </div>
-
-                    <!-- Tabla de registros -->
-                    <table class="tabla-registro">
-                        <thead>
-                            <tr>
-                                <th>Tipo de elemento</th>
-                                <th>Dirección de instalación</th>
-                                <th>Coordenadas</th>
-                                <th>Tipo de solicitud</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="fila-ejemplo">
-                                <td>EJEMPLO</td>
-                                <td>Alborada 7ma etapa mz 715 villa 1 y mz 702 villa 8 ubicada en la calle 17 NE</td>
-                                <td>-2.141993, -79.902016</td>
-                                <td>REGULARIZACIÓN</td>
-                                <td></td>
-                                <!-- Empty cell for alignment -->
-                            </tr>
-                            <!--  The added rows will go here -->
-                            <tr id="registrosContainer"></tr>
-                        </tbody>
-
-                    </table>
-                </div>
-            </div>
-
-            <!-- Declaración -->
-            <div class="declaracion-container">
-                <!-- Título -->
-                <div class="declaracion-titulo">
-                    <h2>Declaración:</h2>
-                </div>
-
-                <!-- Contenido de la declaración -->
-                <div class="declaracion-contenido">
-                    <p>
-                        1. Cuando en un procedimiento sancionador se determine el retiro de un elemento de seguridad y el representante responsable
-                        del colectivo o comunidad no solicite la devolución en el plazo de 30 días contemplado en la Ordenanza
-                        que regula la ocupación del espacio o vía pública mediante la instalación de elementos de seguridad
-                        en el cantón Guayaquil, en mi calidad de representante responsable acepto expresamente que dichos
-                        bienes pasan a ser entregados al Gobierno Autónomo Descentralizado Municipal de Guayaquil para su
-                        disposición final.
-                    </p>
-
-                    <p>
-                        2. En mi calidad de representante responsable del colectivo o comunidad, mediante la suscripción del presente formulario
-                        acepto ser notificado mediante el correo electrónico que se declara en la presente solicitud.
-                    </p>
-
-                    <p>
-                        3. En mi calidad de representante responsable del colectivo o comunidad declaro de manera libre y voluntaria, que la información
-                        proporcionada se sujeta estrictamente a la verdad, dejando constancia que me someto a las sanciones
-                        penales y tributarias establecidas en la ley, para el caso de incurrir en falsedades.
-                    </p>
-                </div>
-
-                <div class="terminos-condiciones">
-                    <input type="checkbox" id="aceptaTerminos" />
-                    <p>Acepto los terminos y condiciones</p>
-                </div>
-            </div>
-
-            <div class="enviar-formulario">
-                <button onclick="enviarFormulario()">Enviar Formulario</button>
-            </div>
-        </main>
-        <!-- Cierre correcto de la etiqueta main -->
-    </apex:form>
+      <div class="enviar-formulario">
+        <button onclick="enviarFormulario()">Enviar Formulario</button>
+      </div>
+    </main>
+    <!-- Cierre correcto de la etiqueta main -->
+  </apex:form>
 </apex:page>
